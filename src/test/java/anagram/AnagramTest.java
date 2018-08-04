@@ -7,24 +7,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AnagramTest {
     @Test
     public void shouldReturnTheSameGivenOneLetterString() {
-        assertThat(Anagram.generate("a")).containsOnlyOnce("a");
+        assertThat(Anagram.generatePermutation("a")).containsOnlyOnce("a");
     }
 
     @Test
     public void shouldReturnAllPossibleCombosGivenTwoLetters() {
-        assertThat(Anagram.generate("ab")).containsOnlyOnce("ba", "ab");
+        assertThat(Anagram.generatePermutation("ab")).containsOnlyOnce("ba", "ab");
     }
 
     @Test
     public void shouldReturnAllPossibleCombosGivenThreeLetters() {
-        assertThat(Anagram.generate("abc")).containsOnlyOnce(
+        assertThat(Anagram.generatePermutation("abc")).containsOnlyOnce(
                 "abc", "cab", "bca",
                 "acb", "cba", "bac");
     }
 
     @Test
     public void shouldReturnAllPossibleCombosGivenFourLetters() {
-        assertThat(Anagram.generate("abcd")).containsOnlyOnce(
+        assertThat(Anagram.generatePermutation("abcd")).containsOnlyOnce(
                 "acbd", "adbc", "bcad", "bdac", "cbad", "cdab", "abdc", "acdb", "bacd", "bdca", "cabd", "cdba",
                 "dbac","dcab", "abcd", "adcb", "badc", "bcda", "dcba", "dabc", "cbda", "cadb", "dbca", "dacb"
         );

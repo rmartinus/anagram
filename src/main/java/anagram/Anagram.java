@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Anagram {
-    public static Set<String> generate(String string) {
+    public static Set<String> generatePermutation(String string) {
         Set<String> result = new HashSet<>();
         traverse(string, 0, string.length() - 1, result);
         return result;
