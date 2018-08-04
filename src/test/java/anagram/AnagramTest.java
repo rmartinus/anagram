@@ -29,4 +29,9 @@ public class AnagramTest {
                 "dbac","dcab", "abcd", "adcb", "badc", "bcda", "dcba", "dabc", "cbda", "cadb", "dbca", "dacb"
         );
     }
+
+    @Test
+    public void shouldSwapCharacters() {
+        assertThat(Anagram.swap("abcd", 0, 2)).isEqualTo("cbad");
+    }
 }

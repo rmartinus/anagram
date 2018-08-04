@@ -17,12 +17,11 @@ public class Anagram {
             for (int i = startIndex; i <= endIndex; i++) {
                 string = swap(string, startIndex, i);
                 traverse(string, startIndex + 1, endIndex, permutation);
-                string = swap(string, startIndex, i);
             }
         }
     }
 
-    public static String swap(String string, int sourceIndex, int targetIndex) {
+    static String swap(String string, int sourceIndex, int targetIndex) {
         char tempChar;
         char[] chars = string.toCharArray();
         tempChar = chars[sourceIndex];
