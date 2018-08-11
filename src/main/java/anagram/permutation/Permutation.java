@@ -1,9 +1,9 @@
-package anagram;
+package anagram.permutation;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Anagram {
+public class Permutation {
     public static Set<String> generatePermutation(String string) {
         Set<String> result = new HashSet<>();
         traverse(string, 0, string.length() - 1, result);
