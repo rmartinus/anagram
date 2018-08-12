@@ -14,11 +14,23 @@ public class AnagramApplicationTests {
     @Test
     public void shouldReturnAnagrams() {
         AnagramWebClient client = new AnagramWebClient();
-        Disposable disposable = client.getAnagrams("abc");
+        Disposable disposable = client.getAnagrams("Reactive");
+
+        AnagramWebClient client2 = new AnagramWebClient();
+        Disposable disposable2 = client2.getAnagrams("Programming");
+
+        AnagramWebClient client3 = new AnagramWebClient();
+        Disposable disposable3 = client3.getAnagrams("Whoop!");
+
         try {
-            Util.sleep(20000);
+            while (!disposable.isDisposed() || !disposable2.isDisposed() || !disposable3.isDisposed()) {
+                Util.sleep(5000);
+            }
         } finally {
             disposable.dispose();
+            disposable2.dispose();
+            disposable3.dispose();
+            Util.sleep(3000);
         }
     }
 }
