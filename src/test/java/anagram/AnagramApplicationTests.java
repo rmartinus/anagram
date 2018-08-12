@@ -26,11 +26,11 @@ public class AnagramApplicationTests {
             while (!disposable.isDisposed() || !disposable2.isDisposed() || !disposable3.isDisposed()) {
                 Util.sleep(5000);
             }
+            Util.sleep(3000);
         } finally {
             disposable.dispose();
             disposable2.dispose();
             disposable3.dispose();
-            Util.sleep(3000);
         }
     }
 }
