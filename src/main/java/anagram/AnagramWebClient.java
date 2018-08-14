@@ -33,6 +33,26 @@ public class AnagramWebClient {
                 .subscribe(s -> LOGGER.info("{} >>>>>>> {}", counter.incrementAndGet(), s),
                         err -> LOGGER.info("Error: {}", err),
                         () -> LOGGER.info("Permutation stream stopped"));
+    }
+
+    public Disposable saveAnagrams(String string) {
+        AtomicInteger counter = new AtomicInteger(0);
+        return webClient.get()
+                .uri("/anagram/uppercase/{string}", string)
+                .accept(MediaType.APPLICATION_STREAM_JSON)
+                .exchange()
+                .flatMap(response -> response.bodyToMono(String.class))
+                .flatMap(uppercaseString ->
+                        webClient.post().uri("/anagram/{uppercaseString}", uppercaseString)
+                                .accept(MediaType.APPLICATION_STREAM_JSON)
+                                .exchange()
+                                .flatMap(response -> response.bodyToMono(PermutationData.class))
+                                .delayElement(Duration.ofMillis(1000))
+                )
+                .delayElement(Duration.ofMillis(1000))
+                .subscribe(s -> LOGGER.info("{} >>>>>>> {}", counter.incrementAndGet(), s),
+                        err -> LOGGER.info("Error: {}", err),
+                        () -> LOGGER.info("Permutation stream stopped"));
 
     }
 

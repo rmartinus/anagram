@@ -18,7 +18,9 @@ public class AnagramRouter {
                 .route(RequestPredicates.GET("/anagram/{string}")
                         .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), permutationHandler::generatePermutation)
                 .andRoute(RequestPredicates.GET("/anagram/uppercase/{string}")
-                        .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), uppercaseHandler::generateUppercase);
+                        .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), uppercaseHandler::generateUppercase)
+                .andRoute(RequestPredicates.POST("/anagram/{string}")
+                    .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), permutationHandler::savePermutation);
 
     }
 }

@@ -33,4 +33,19 @@ public class AnagramApplicationTests {
             disposable3.dispose();
         }
     }
+
+    /**
+     * This test currently needs mongodb to be started up locally
+     */
+    @Test
+    public void shouldSaveAnagrams() {
+        AnagramWebClient client = new AnagramWebClient();
+        Disposable disposable = client.saveAnagrams("mongo");
+
+        try {
+            Util.sleep(5000);
+        } finally {
+            disposable.dispose();
+        }
+    }
 }
