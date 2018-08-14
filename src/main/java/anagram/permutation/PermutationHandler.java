@@ -39,11 +39,18 @@ public class PermutationHandler {
         AnagramEntity entity = new AnagramEntity();
         entity.setString(string);
         entity.setPermutations(stringSet);
+
         LOGGER.info("Saving entity to mongodb: {}", entity);
-        Mono<AnagramEntity> savedEntity = anagramRepository.save(entity);
+        Mono<PermutationData> permutationDataMono = anagramRepository.save(entity)
+                .map(e -> {
+                    PermutationData permutationData = new PermutationData();
+                    permutationData.setInput(e.getString());
+                    permutationData.setAnagram(e.getPermutations());
+                    return permutationData;
+                });
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(savedEntity, AnagramEntity.class);
+                .body(permutationDataMono, PermutationData.class);
     }
 }
