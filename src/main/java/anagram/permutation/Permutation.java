@@ -1,9 +1,14 @@
 package anagram.permutation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Permutation {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Permutation.class);
+
     public static Set<String> generatePermutation(String string) {
         Set<String> result = new HashSet<>();
         traverse(string, 0, string.length() - 1, result);
@@ -11,6 +16,8 @@ public class Permutation {
     }
 
     private static void traverse(String string, int startIndex, int endIndex, Set<String> permutation) {
+        LOGGER.debug("Traversing string {} startIndex {} endIndex {}", string, startIndex, endIndex);
+
         if (startIndex == endIndex) {
             permutation.add(string);
         } else {

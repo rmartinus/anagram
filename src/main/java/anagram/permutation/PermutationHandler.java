@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Set;
@@ -34,7 +35,7 @@ public class PermutationHandler {
 
     public Mono<ServerResponse> getPermutation(ServerRequest serverRequest) {
         String string = serverRequest.pathVariable("string");
-        Mono<PermutationData> permutationDataMono = anagramRepository.findByString(string)
+        Flux<PermutationData> permutationDataFlux = anagramRepository.findByString(string)
                 .map(entity -> {
                     LOGGER.info("Found entity from db: {}", entity);
                     PermutationData permutationData = new PermutationData();
@@ -45,7 +46,7 @@ public class PermutationHandler {
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
-                .body(permutationDataMono, PermutationData.class);
+                .body(permutationDataFlux.next(), PermutationData.class);
     }
 
     public Mono<ServerResponse> savePermutation(ServerRequest serverRequest) {
@@ -56,9 +57,10 @@ public class PermutationHandler {
         entity.setString(string);
         entity.setPermutations(stringSet);
 
-        Mono<PermutationData> permutationDataMono = anagramRepository.save(entity)
+        Flux<PermutationData> permutationDataFlux = anagramRepository.findByString(string)
+                .switchIfEmpty(anagramRepository.save(entity))
                 .map(newEntity -> {
-                    LOGGER.info("Entity saved to mongodb: {}", entity);
+                    LOGGER.info("Entity either found or saved in mongodb: {}", entity);
                     PermutationData permutationData = new PermutationData();
                     permutationData.setInput(newEntity.getString());
                     permutationData.setAnagram(newEntity.getPermutations());
@@ -67,6 +69,6 @@ public class PermutationHandler {
 
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
-                .body(permutationDataMono, PermutationData.class);
+                .body(permutationDataFlux.next(), PermutationData.class);
     }
 }
