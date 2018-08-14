@@ -7,9 +7,24 @@ import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.Disposable;
 import util.Util;
 
+/**
+ * This test currently needs mongodb to be started up locally
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.main.web-application-type=reactive", webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class AnagramApplicationTests {
+
+    @Test
+    public void shouldReturnOneAnagram() {
+        AnagramWebClient client = new AnagramWebClient();
+        Disposable disposable = client.getAnagrams("reactive");
+
+        try {
+            Util.sleep(5000);
+        } finally {
+            disposable.dispose();
+        }
+    }
 
     @Test
     public void shouldReturnAnagrams() {
@@ -34,16 +49,16 @@ public class AnagramApplicationTests {
         }
     }
 
-    /**
-     * This test currently needs mongodb to be started up locally
-     */
     @Test
     public void shouldSaveAnagrams() {
         AnagramWebClient client = new AnagramWebClient();
-        Disposable disposable = client.saveAnagrams("mongo");
+        Disposable disposable = client.saveAnagrams("Reactive");
 
         try {
-            Util.sleep(5000);
+            while (!disposable.isDisposed()) {
+                Util.sleep(5000);
+            }
+            Util.sleep(3000);
         } finally {
             disposable.dispose();
         }

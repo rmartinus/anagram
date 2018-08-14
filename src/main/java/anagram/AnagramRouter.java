@@ -16,11 +16,12 @@ public class AnagramRouter {
     public RouterFunction<ServerResponse> route(PermutationHandler permutationHandler, UppercaseHandler uppercaseHandler) {
         return RouterFunctions
                 .route(RequestPredicates.GET("/anagram/{string}")
+                        .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), permutationHandler::getPermutation)
+                .andRoute(RequestPredicates.GET("/anagram/generate/{string}")
                         .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), permutationHandler::generatePermutation)
                 .andRoute(RequestPredicates.GET("/anagram/uppercase/{string}")
                         .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), uppercaseHandler::generateUppercase)
                 .andRoute(RequestPredicates.POST("/anagram/{string}")
                     .and(RequestPredicates.accept(MediaType.APPLICATION_STREAM_JSON)), permutationHandler::savePermutation);
-
     }
 }

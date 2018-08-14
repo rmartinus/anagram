@@ -23,13 +23,19 @@ public class AnagramWebClient {
                 .exchange()
                 .flatMap(response -> response.bodyToMono(String.class))
                 .flatMap(uppercaseString ->
-                        webClient.get().uri("/anagram/{uppercaseString}", uppercaseString)
+                        webClient.get()
+                                .uri("/anagram/{uppercaseString}", uppercaseString)
                                 .accept(MediaType.APPLICATION_STREAM_JSON)
                                 .exchange()
                                 .flatMap(response -> response.bodyToMono(PermutationData.class))
-                                .delayElement(Duration.ofMillis(1000))
+                                .switchIfEmpty(
+                                        webClient.get().uri("/anagram/generate/{uppercaseString}", uppercaseString)
+                                                .accept(MediaType.APPLICATION_STREAM_JSON)
+                                                .exchange()
+                                                .flatMap(response -> response.bodyToMono(PermutationData.class))
+                                                .delayElement(Duration.ofMillis(1000))
+                                )
                 )
-                .delayElement(Duration.ofMillis(1000))
                 .subscribe(s -> LOGGER.info("{} >>>>>>> {}", counter.incrementAndGet(), s),
                         err -> LOGGER.info("Error: {}", err),
                         () -> LOGGER.info("Permutation stream stopped"));

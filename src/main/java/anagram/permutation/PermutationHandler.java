@@ -32,6 +32,22 @@ public class PermutationHandler {
                 .body(Mono.just(permutationData), PermutationData.class);
     }
 
+    public Mono<ServerResponse> getPermutation(ServerRequest serverRequest) {
+        String string = serverRequest.pathVariable("string");
+        Mono<PermutationData> permutationDataMono = anagramRepository.findByString(string)
+                .map(entity -> {
+                    LOGGER.info("Found entity from db: {}", entity);
+                    PermutationData permutationData = new PermutationData();
+                    permutationData.setInput(entity.getString());
+                    permutationData.setAnagram(entity.getPermutations());
+                    return permutationData;
+                });
+
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_STREAM_JSON)
+                .body(permutationDataMono, PermutationData.class);
+    }
+
     public Mono<ServerResponse> savePermutation(ServerRequest serverRequest) {
         String string = serverRequest.pathVariable("string");
         Set<String> stringSet = Permutation.generatePermutation(string);
@@ -40,12 +56,12 @@ public class PermutationHandler {
         entity.setString(string);
         entity.setPermutations(stringSet);
 
-        LOGGER.info("Saving entity to mongodb: {}", entity);
         Mono<PermutationData> permutationDataMono = anagramRepository.save(entity)
-                .map(e -> {
+                .map(newEntity -> {
+                    LOGGER.info("Entity saved to mongodb: {}", entity);
                     PermutationData permutationData = new PermutationData();
-                    permutationData.setInput(e.getString());
-                    permutationData.setAnagram(e.getPermutations());
+                    permutationData.setInput(newEntity.getString());
+                    permutationData.setAnagram(newEntity.getPermutations());
                     return permutationData;
                 });
 
