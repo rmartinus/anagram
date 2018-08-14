@@ -50,7 +50,7 @@ public class PermutationHandler {
                 });
 
         return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_STREAM_JSON)
                 .body(permutationDataMono, PermutationData.class);
     }
 }
