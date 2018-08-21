@@ -8,9 +8,25 @@ Input: abc
 
 Output: abc, cab, bca, acb, cba, bac
 
-##### Endpoints:
+#### Endpoints:
 * Make input string uppercase
 * Generate a set of all anagram permutations given a string
 * Save permutation in MongoDB
 
 Built using Spring Reactor and Reactive MongoDB NoSQL database
+
+## Starting
+* Start up mongod
+
+  `$ sudo mongod`
+
+* Run AnagramWebClient
+* Go to mongo client
+
+  `$ mongo`
+
+* Check that data is inserted
+
+  `> use anagram`
+  
+  `> db.anagram.find()`

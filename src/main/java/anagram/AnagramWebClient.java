@@ -64,7 +64,7 @@ public class AnagramWebClient {
                         () -> LOGGER.info("Permutation stream stopped"));
 
         try {
-            Util.sleep(20000);
+            Util.sleep(5000);
         } finally {
             disposable.dispose();
         }
