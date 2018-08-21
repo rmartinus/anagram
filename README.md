@@ -16,6 +16,10 @@ Output: abc, cab, bca, acb, cba, bac
 Built using Spring Reactor and Reactive MongoDB NoSQL database
 
 ## Starting
+* Start up app
+
+  `$ ./gradlew bootRun`
+  
 * Start up mongod
 
   `$ sudo mongod`
