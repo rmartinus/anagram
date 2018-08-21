@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.Disposable;
+import reactor.core.publisher.Mono;
 import util.Util;
 
 import java.time.Duration;
@@ -15,8 +16,7 @@ public class AnagramWebClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnagramWebClient.class);
     private WebClient webClient = WebClient.builder().baseUrl("http://localhost:8080").build();
 
-    public Disposable getAnagrams(String string) {
-        AtomicInteger counter = new AtomicInteger(0);
+    public Mono<PermutationData> getAnagrams(String string) {
         return webClient.get()
                 .uri("/anagram/uppercase/{string}", string)
                 .accept(MediaType.APPLICATION_STREAM_JSON)
@@ -35,14 +35,10 @@ public class AnagramWebClient {
                                                 .flatMap(response -> response.bodyToMono(PermutationData.class))
                                                 .delayElement(Duration.ofMillis(1000))
                                 )
-                )
-                .subscribe(s -> LOGGER.info("{} >>>>>>> {}", counter.incrementAndGet(), s),
-                        err -> LOGGER.info("Error: {}", err),
-                        () -> LOGGER.info("Permutation stream stopped"));
+                );
     }
 
-    public Disposable saveAnagrams(String string) {
-        AtomicInteger counter = new AtomicInteger(0);
+    public Mono<PermutationData> saveAnagrams(String string) {
         return webClient.get()
                 .uri("/anagram/uppercase/{string}", string)
                 .accept(MediaType.APPLICATION_STREAM_JSON)
@@ -55,16 +51,18 @@ public class AnagramWebClient {
                                 .flatMap(response -> response.bodyToMono(PermutationData.class))
                                 .delayElement(Duration.ofMillis(1000))
                 )
-                .delayElement(Duration.ofMillis(1000))
+                .delayElement(Duration.ofMillis(1000));
+    }
+
+    public static void main(String[] args) {
+        AtomicInteger counter = new AtomicInteger(0);
+
+        AnagramWebClient client = new AnagramWebClient();
+        Disposable disposable = client.saveAnagrams("Reactive")
                 .subscribe(s -> LOGGER.info("{} >>>>>>> {}", counter.incrementAndGet(), s),
                         err -> LOGGER.info("Error: {}", err),
                         () -> LOGGER.info("Permutation stream stopped"));
 
-    }
-
-    public static void main(String[] args) {
-        AnagramWebClient anagramWebClient = new AnagramWebClient();
-        Disposable disposable = anagramWebClient.getAnagrams("Hello");
         try {
             Util.sleep(20000);
         } finally {
