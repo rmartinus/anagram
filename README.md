@@ -16,6 +16,13 @@ Output: abc, cab, bca, acb, cba, bac
 Built using Spring Reactor and Reactive MongoDB NoSQL database
 
 ## Starting
+### Using docker-compose
+* `$ ./gradlew clean build`
+* `$ docker-compose up --build`
+* Go to http://localhost:8080/anagram/generate/Xyz
+* Check data is inserted
+
+### Manually
 * Start up mongod
 
   `$ sudo mongod`

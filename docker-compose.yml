@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4.1.6-xenial
+    restart: always
+    networks:
+      - my-network
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    logging:
+      driver: json-file
+  ranagram:
+    container_name: reactive-anagram
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ranagram:latest
+    networks:
+      - my-network
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+    logging:
+      driver: json-file
+networks:
+  my-network:
+    driver: bridge
