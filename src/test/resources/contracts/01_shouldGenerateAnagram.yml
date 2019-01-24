@@ -6,7 +6,7 @@ request:
 response:
   status: 200
   headers:
-    Content-Type: application/json
+    Content-Type: application/stream
   body: '{
     "input": "Xyz",
     "anagram": [
@@ -21,4 +21,4 @@ response:
   matchers:
     headers:
     - key: Content-Type
-      regex: application/json.*
+      regex: application/stream.*
