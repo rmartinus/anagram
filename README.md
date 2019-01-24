@@ -31,6 +31,8 @@ $ docker run --rm -e "APPLICATION_BASE_URL=http://192.168.0.8:8080" -e "PUBLISH_
 ```
 $ docker run --rm -e "STUBRUNNER_IDS=anagram:anagram:0.0.1.RELEASE:stubs:9876" -e "STUBRUNNER_REPOSITORY_ROOT=http://192.168.0.8:8081/artifactory/libs-release-local" -p "8083:8083" -p "9876:9876" springcloud/spring-cloud-contract-stub-runner:"1.2.3.RELEASE"
 ```
+* Go to http://localhost:9876/anagram/generate/Xyz
+* You should get the result as stated in contract yml
 
 ### Manually
 * Start up mongod
