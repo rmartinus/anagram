@@ -18,6 +18,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: ranagram:latest
+    restart: always
     networks:
       - my-network
     expose:
@@ -26,6 +27,23 @@ services:
       - 8080:8080
     depends_on:
       - mongo
+    logging:
+      driver: json-file
+  artifactory:
+    container_name: artifactory
+    build:
+      context: .
+      dockerfile: Dockerfile-artifactory
+    image: artifactory:latest
+    restart: always
+    networks:
+      - my-network
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    depends_on:
+      - ranagram
     logging:
       driver: json-file
 networks:

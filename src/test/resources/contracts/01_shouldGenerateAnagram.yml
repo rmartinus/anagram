@@ -1,0 +1,24 @@
+description: |
+  Should generate anagram
+request:
+  method: GET
+  url: /anagram/Xyz
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body: '{
+    "input": "Xyz",
+    "anagram": [
+      "Xzy",
+      "yzX",
+      "Xyz",
+      "zyX",
+      "yXz",
+      "zXy"
+    ]
+  }'
+  matchers:
+    headers:
+    - key: Content-Type
+      regex: application/json.*
