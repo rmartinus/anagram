@@ -2,7 +2,7 @@ description: |
   Should generate anagram
 request:
   method: GET
-  url: /anagram/Xyz
+  url: /anagram/generate/Xyz
 response:
   status: 200
   headers:
